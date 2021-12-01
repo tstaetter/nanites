@@ -51,5 +51,11 @@ module Nanites
   end
 
   # Generic value representing a nil or empty value to be used inside an Option instance
-  class None < Option; end
+  class None < Option
+    # Convenience method raising a ValueError if called
+    # @raise ValueError
+    def value
+      raise ValueError, "No values available in a #{self.class.name}"
+    end
+  end
 end
