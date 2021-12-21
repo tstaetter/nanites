@@ -2,9 +2,8 @@
 
 module Nanites
   module Actions
-    # Abstract nanite class
+    # Abstract Nanite command class
     # @abstract
-    #
     class Command
       attr_reader :result
 
@@ -13,12 +12,9 @@ module Nanites
         @result = Option.none
       end
 
-      ##
       # Execute the nanite
       # @abstract
       # @param [Hash] _params Optional arguments
-      # @raise StandardError
-      #
       def execute(**_params)
         raise NotImplementedError, 'Implement in specialized class'
       end
@@ -36,15 +32,15 @@ module Nanites
       # Set the nanites output to a successful result
       # @param [Object] payload Optional payload stored within the result
       # @param [Array] messages Optional array of informational messages
-      def success!(payload, *messages)
-        @result = Result.create_success payload, *messages
+      def success(payload, *messages)
+        @result = Result.success payload, *messages
       end
 
       # Set the nanites output to a erroneous result
+      # @param [Object] payload Optional payload stored within the result
       # @param [Array] messages Optional array of informational messages
-      # @param [Hash] payload Optional payload stored within the result
-      def error!(messages = [], payload = {})
-        @result = Result.create_error payload, *messages
+      def error(payload, *messages)
+        @result = Result.error payload, *messages
       end
     end
   end

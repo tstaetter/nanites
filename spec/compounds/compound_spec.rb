@@ -1,4 +1,7 @@
 # frozen_string_literal: true
 
-describe Nanites::Actions::Compound do
+require 'spec_helper'
+
+RSpec.describe Nanites::Actions::Compound do
+  it_behaves_like :ClassLoader
 end

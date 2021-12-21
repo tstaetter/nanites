@@ -1,15 +1,10 @@
 # frozen_string_literal: true
 
 module Nanites
-  # Is raised, when a None option is tried to be unwrapped
-  class ValueError < StandardError; end
-
   # Generic value class which either holds an instance of [Some] or [None]
   class Option
     # Create a new Option value
-    # @param [Object] value If present, it will be wrapped inside a [Some] instance, otherwise a [None] value
-    #   will be returned when calling #unwrap
-    def initialize(value = nil); end
+    def initialize(_ = nil); end
 
     # Is a [None] value?
     def none?
@@ -36,26 +31,28 @@ module Nanites
 
   # Generic value representing a not nil value to be used inside an Option instance
   class Some < Option
-    attr_reader :value
-
     # Create a new value container
     # @param [Object] value an arbitrary object
-    # @raise ValueError if value is nil
     def initialize(value)
-      raise ValueError, "Can't create a 'Some' without value" if value.nil?
-
       super
-
       @value = value
+    end
+
+    # Getter for encapsulated value object
+    # @raise [Nanites::Errors::ValueError] if value is nil
+    def value
+      raise Nanites::Errors::ValueError, 'Value is nil' unless @value
+
+      @value
     end
   end
 
   # Generic value representing a nil or empty value to be used inside an Option instance
   class None < Option
     # Convenience method raising a ValueError if called
-    # @raise ValueError
+    # @raise [Nanites::Errors::ValueError]
     def value
-      raise ValueError, "No values available in a #{self.class.name}"
+      raise Nanites::Errors::ValueError, "No values available in a #{self.class.name} object"
     end
   end
 end

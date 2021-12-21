@@ -34,11 +34,19 @@ module Nanites
     end
 
     class << self
-      def create_error(payload, *messages)
+      # Create erroneous result object
+      # @param [Object] payload optional payload
+      # @param [Array] messages optional informational messages
+      # @return [Nanites::Result]
+      def error(payload, *messages)
         Result.new option_for_payload(payload), States::ERROR, *messages
       end
 
-      def create_success(payload, *messages)
+      # Create successful result object
+      # @param [Object] payload optional payload
+      # @param [Array] messages optional informational messages
+      # @return [Nanites::Result]
+      def success(payload, *messages)
         Result.new option_for_payload(payload), States::SUCCESS, *messages
       end
 
@@ -48,11 +56,11 @@ module Nanites
       # @param [Object] payload The value to be wrapped
       # @return [Option]
       def option_for_payload(payload)
-        if payload.nil?
-          Option.none
-        else
-          Option.some payload
-        end
+        pl = payload || Option.none
+
+        return pl if pl.none?
+      rescue NoMethodError
+        Option.some(payload)
       end
     end
   end

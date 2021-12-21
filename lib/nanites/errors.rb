@@ -3,6 +3,7 @@
 module Nanites
   # Defines all custom error classes
   module Errors
-    class UnknownResultError < StandardError; end
+    # Is raised, when a None option is tried to be unwrapped
+    class ValueError < StandardError; end
   end
 end

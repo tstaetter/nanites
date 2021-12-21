@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
   spec.summary       = 'Command pattern framework'
   spec.description   = 'Tiny rubyish command pattern framework'
   spec.homepage      = 'https://github.com/tstaetter/nanites.git'
-  spec.required_ruby_version = '>= 2.4.0'
+  spec.required_ruby_version = '>= 3.0'
 
   spec.metadata['allowed_push_host'] = 'https://rubygems.org'
 
@@ -31,4 +31,7 @@ Gem::Specification.new do |spec|
 
   # For more information and examples about making a new gem, checkout our
   # guide at: https://bundler.io/guides/creating_gem.html
+  spec.metadata = {
+    'rubygems_mfa_required' => 'true'
+  }
 end

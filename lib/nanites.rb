@@ -1,8 +1,12 @@
 # frozen_string_literal: true
 
 require_relative 'nanites/version'
+require_relative 'nanites/errors'
+require_relative 'nanites/option'
+require_relative 'nanites/actions/result'
+require_relative 'nanites/actions/command'
+require_relative 'nanites/actions/compound'
 
+# Nanites implements a tiny framework for command pattern implementations
 module Nanites
-  class Error < StandardError; end
-  # Your code goes here...
 end

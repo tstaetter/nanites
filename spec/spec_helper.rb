@@ -1,6 +1,17 @@
 # frozen_string_literal: true
 
+$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
+
+require 'simplecov'
+
+SimpleCov.start do
+  add_filter '/spec/'
+  add_filter '/.idea/'
+end
+
 require 'nanites'
+require 'support/class_loader_spec'
+require 'support/spec_command'
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure

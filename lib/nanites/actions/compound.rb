@@ -7,8 +7,8 @@ module Nanites
     # one
     class Compound
       # Create a new compound
-      def initialize(nanites = [])
-
+      def initialize(nanites)
+        @nanites = nanites
       end
     end
   end
