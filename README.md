@@ -1,37 +1,64 @@
-# Nanites: tiny command pattern framework for Ruby
+[![RSpec](https://github.com/tstaetter/nanites/actions/workflows/main.yml/badge.svg?branch=main&event=push)](https://github.com/tstaetter/nanites/actions/workflows/main.yml)
+
+# Nanites - tiny command pattern framework for Ruby
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'nanites'
+gem 'nanites', github: 'tstaetter/nanites', branch: 'main'
 ```
 
 And then execute:
 
     $ bundle install
 
-Or install it yourself as:
+When available on rubygems.org, you ccan install it yourself as:
 
     $ gem install nanites
 
+TODO: Push gem to rubygems when initial release is ready
+
 ## Usage
 
-## TODO
+Using the framework is pretty straight forward (see specs for more examples).
 
-- Harmonize Command#success! and Command#error!
+```ruby
+class MyCommand < Nanites::Actions::Command
+  def execute(**params)
+    # your code here
+    if all_went_well
+      success success_payload
+    else
+      error error_payload
+    end
+  end
+end
+
+result = MyCommand.execute some_payload
+
+puts result.value if result.success?
+# => Nanites::Some @value=<success payload>
+```
+
+Result values are always wrapped in an ```Nanites::Option``` object which
+either is a ```Nanites::Some``` indicating some return value is available or
+```Nanites::None``` for no value.
+
+This is done in order to not having the hazzle to deal with ```nil``` values. This
+approach is inspired by the Option type in [Rust](https://www.rust-lang.org/).
+
+## TODOs for the first release
+
+- Harmonize Command#success and Command#error
 - Allow command execution w/o event but only params
 - Implement fault tolerant compound
-- Implement transactional compound
-- Write usage instructions
 
 
 ## Development
 
-`rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
-
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and the created tag, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+`rake spec` to run the tests.
 
 ## Contributing
 

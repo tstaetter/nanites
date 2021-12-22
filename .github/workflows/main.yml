@@ -1,4 +1,4 @@
-name: Ruby
+name: RSpec
 
 on: [push,pull_request]
 
@@ -10,7 +10,7 @@ jobs:
     - name: Set up Ruby
       uses: ruby/setup-ruby@v1
       with:
-        ruby-version: 3.0.2
+        ruby-version: 3.0.3
         bundler-cache: true
     - name: Run the specs
       run: bundle exec rspec
