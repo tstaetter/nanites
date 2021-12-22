@@ -14,7 +14,7 @@ And then execute:
 
     $ bundle install
 
-When available on rubygems.org, you ccan install it yourself as:
+When available on rubygems.org, you can install it yourself as:
 
     $ gem install nanites
 

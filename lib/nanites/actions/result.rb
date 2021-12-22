@@ -17,25 +17,27 @@ module Nanites
       # @param [Option] value
       # @param [Integer] status
       # @param [Array] messages
-      # @raise ArgumentError if payload is not of type [Option]
+      # @raise [ArgumentError] if payload is not of type [Nanites::Option]
       def initialize(value, status = States::UNKNOWN, *messages)
-        raise ArgumentError, 'Payload must be an "Option"' unless value.is_a? Option
+        raise ArgumentError, 'Payload must be an "Option"' unless value.is_a?(Nanites::Option)
 
         @value = value
         @messages = messages
         @status = status
       end
 
+      # Does the result indicate some error?
       def error?
         @status.eql? States::ERROR
       end
 
+      # Does the result indicate successful command execution?
       def success?
         @status.eql? States::SUCCESS
       end
 
       class << self
-        # Create erroneous result object
+        # Create result object indicating an erroneous command execution
         # @param [Object] value optional payload
         # @param [Array] messages optional informational messages
         # @return [Nanites::Result]
