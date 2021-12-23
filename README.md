@@ -26,7 +26,6 @@ Using the framework is pretty straight forward (see specs for more examples).
 
 ```ruby
 class MyCommand < Nanites::Actions::Command
-  # Be sure to return the @result in any case
   def execute(**params)
     # your code here
     if all_went_well
@@ -34,11 +33,10 @@ class MyCommand < Nanites::Actions::Command
     else
       error error_payload
     end
-  rescue
-    super
   end
 end
 
+# Be sure to only use the class method #execute, it ensures save execution
 result = MyCommand.execute some_payload
 
 puts result.value if result.success?

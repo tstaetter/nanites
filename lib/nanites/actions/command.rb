@@ -28,8 +28,14 @@ module Nanites
         # execute methods
         # @param [Object] payload optional payload
         # @param [Hash] params optional parameters
+        # @return [Result]
         def execute(payload = nil, **params)
-          new(payload).execute(**params)
+          cmd = new(payload)
+          cmd.execute(**params)
+
+          cmd.result
+        rescue StandardError => e
+          Result.error e, "Error executing command with payload '#{payload}'"
         end
       end
 

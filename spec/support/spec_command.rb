@@ -23,3 +23,9 @@ class PayloadSpecCommand < Nanites::Actions::Command
     super
   end
 end
+
+class AlwaysErrorCommand < Nanites::Actions::Command
+  def execute(**params)
+    raise StandardError, 'Will always be raised'
+  end
+end
