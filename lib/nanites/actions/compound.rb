@@ -27,9 +27,11 @@ module Nanites
       # Execute the compound
       # @param [Hash] params optional parameters which get passed on to each command
       # @return [Hash] the context hash containing the result for each command
+      # :reek:DuplicateMethodCall { max_calls: 3 }
+      # :reek:TooManyStatements { max_statements: 6 }
       def execute(**params)
         @queue.each do |cmd|
-          cmd.execute **params
+          cmd.execute(params)
           @context[cmd.id] = cmd.result
         rescue StandardError => e
           @context[cmd.id] = Result.error e, "Error executing command '#{cmd.id}'"
@@ -43,8 +45,8 @@ module Nanites
       # Helper adding given nanites to the queue. Only enqueues [Nanites::Actions::Command] objects
       # @param [Array] nanites Array of command objects
       def initialize_queue(nanites)
-        nanites.each do |n|
-          @queue << n if n.is_a?(Nanites::Actions::Command)
+        nanites.each do |nanite|
+          @queue << nanite if nanite.is_a?(Nanites::Actions::Command)
         end
       end
     end

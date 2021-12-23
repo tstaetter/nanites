@@ -2,6 +2,12 @@
 detectors:
   UtilityFunction:
     public_methods_only: true
+  UncommunicativeVariableName:
+    accept:
+      - e
+  FeatureEnvy:
+    exclude:
+      - 'Nanites::Actions::Compound#execute'
 
 exclude_paths:
   - spec
