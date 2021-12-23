@@ -22,7 +22,9 @@ TODO: Push gem to rubygems when initial release is ready
 
 ## Usage
 
-Using the framework is pretty straight forward (see specs for more examples).
+### Commands
+
+Using the commands is pretty straight forward (see specs/support for more examples).
 
 ```ruby
 class MyCommand < Nanites::Actions::Command
@@ -47,15 +49,23 @@ Result values are always wrapped in an ```Nanites::Option``` object which
 either is a ```Nanites::Some``` indicating some return value is available or
 ```Nanites::None``` for no value.
 
-This is done in order to not having the hazzle to deal with ```nil``` values. This
+This is done in order to not having the hassle to deal with ```nil``` values. This
 approach is inspired by the Option type in [Rust](https://www.rust-lang.org/).
 
-## TODOs for the first release
+### Compounds
 
-- Harmonize Command#success and Command#error
-- Allow command execution w/o event but only params
-- Implement fault tolerant compound
+Compounds can be used to combine several commands.
+A little example:
 
+```ruby
+cmd1 = SomeUsefulCommand.new payload
+cmd2 = SomeAnalyticsCommand.new payload
+
+compound = Nanites::Actions::Compound.new cmd1, cmd2
+
+context = compound.execute
+# => 'context' is a hash containing the execution results of each command with the commands ID as key
+```
 
 ## Development
 
