@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'securerandom'
 require_relative 'nanites/version'
 require_relative 'nanites/errors'
 require_relative 'nanites/option'

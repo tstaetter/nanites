@@ -2,14 +2,12 @@
 
 module Nanites
   module Actions
-    # Compounds are collections of nanites, executing each contained
+    # Compounds are queues of nanites, executing each contained
     # nanite, passing the result from an executed as input for the next
     # one
     class Compound
       # Create a new compound
-      def initialize(nanites)
-        @nanites = nanites
-      end
+      def initialize(_nanites); end
     end
   end
 end

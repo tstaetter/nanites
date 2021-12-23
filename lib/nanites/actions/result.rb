@@ -9,19 +9,29 @@ module Nanites
         UNKNOWN = -1
         SUCCESS = 0
         ERROR = 1
+
+        class << self
+          # Is given code a valid status code?
+          # @return [Boolean]
+          def valid_status?(code)
+            (-1..1).include? code
+          end
+        end
       end
 
-      attr_reader :messages, :value, :status
+      attr_reader :messages, :option, :status
 
       # Create new Result
-      # @param [Option] value
+      # @param [Option] option
       # @param [Integer] status
       # @param [Array] messages
       # @raise [ArgumentError] if payload is not of type [Nanites::Option]
-      def initialize(value, status = States::UNKNOWN, *messages)
-        raise ArgumentError, 'Payload must be an "Option"' unless value.is_a?(Nanites::Option)
+      # @raise [ArgumentError] if status code is not supported
+      def initialize(option, status = States::UNKNOWN, *messages)
+        raise ArgumentError, 'Payload must be an "Option"' unless option.is_a?(Nanites::Option)
+        raise ArgumentError, "Unknown status code '#{status}'" unless States.valid_status?(status)
 
-        @value = value
+        @option = option
         @messages = messages
         @status = status
       end
@@ -61,9 +71,7 @@ module Nanites
         def option_for_payload(value)
           pl = value || Option.none
 
-          return pl if pl.none?
-        rescue NoMethodError
-          Option.some(value)
+          pl.is_a?(None) ? pl : Option.some(value)
         end
       end
     end

@@ -5,25 +5,31 @@ module Nanites
     # Abstract Nanite command class
     # @abstract
     class Command
-      attr_reader :result
+      attr_reader :id, :result
 
-      def initialize(event)
-        @event = event
-        @result = Option.none
+      # Create new Command object
+      # @param [Object] payload optional payload
+      def initialize(payload = nil)
+        @id = SecureRandom.uuid
+        @payload = payload
+        @result = not_started_result
       end
 
       # Execute the nanite
       # @abstract
       # @param [Hash] _params Optional arguments
+      # @return [Nanites::Actions::Result]
       def execute(**_params)
-        raise NotImplementedError, 'Implement in specialized class'
+        @result
       end
 
       class << self
-        # Static helper method, instantiating new nanite object and running it's
+        # Static helper method, instantiating new Command object and running it's
         # execute methods
-        def execute(event, **params)
-          new(event).execute(**params)
+        # @param [Object] payload optional payload
+        # @param [Hash] params optional parameters
+        def execute(payload = nil, **params)
+          new(payload).execute(**params)
         end
       end
 
@@ -41,6 +47,13 @@ module Nanites
       # @param [Array] messages Optional array of informational messages
       def error(payload, *messages)
         @result = Result.error payload, *messages
+      end
+
+      private
+
+      # Helper returning a result indicating that this command hasn't yet been executed
+      def not_started_result
+        Result.new Option.none, Result::States::UNKNOWN, 'Not yet executed'
       end
     end
   end
