@@ -2,7 +2,10 @@
 
 module Nanites
   # Generic value class which either holds an instance of [Some] or [None]
+  # :reek:MissingSafeMethod { exclude: [ value! ] }
   class Option
+    attr_reader :value
+
     # Create a new Option value
     def initialize(_ = nil); end
 
@@ -14,6 +17,11 @@ module Nanites
     # Is a [Some] value?
     def some?
       is_a? Some
+    end
+
+    # Insecure getter for value, overwritten in descendants
+    def value!
+      raise NotImplementedError
     end
 
     class << self
@@ -30,6 +38,7 @@ module Nanites
   end
 
   # Generic value representing a not nil value to be used inside an Option instance
+  # :reek:MissingSafeMethod { exclude: [ value! ] }
   class Some < Option
     # Create a new value container
     # @param [Object] value an arbitrary object
@@ -40,18 +49,19 @@ module Nanites
 
     # Getter for encapsulated value object
     # @raise [Nanites::Errors::ValueError] if value is nil
-    def value
+    def value!
       raise Nanites::Errors::ValueError, 'Value is nil' unless @value
 
-      @value
+      value
     end
   end
 
   # Generic value representing a nil or empty value to be used inside an Option instance
+  # :reek:MissingSafeMethod { exclude: [ value! ] }
   class None < Option
     # Convenience method raising a ValueError if called
     # @raise [Nanites::Errors::ValueError]
-    def value
+    def value!
       raise Nanites::Errors::ValueError, "No values available in a #{self.class.name} object"
     end
   end

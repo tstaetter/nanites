@@ -54,6 +54,30 @@ RSpec.describe Nanites::Actions::Result do
     end
   end
 
+  context 'when accessing option value' do
+    it 'returns payload for Some option using safe value method' do
+      result = described_class.success'foo'
+      expect(result.option.value).to eq 'foo'
+    end
+
+    it 'returns payload for Some option using unsafe value! method' do
+      result = described_class.success'foo'
+      expect(result.option.value!).to eq 'foo'
+    end
+
+    it 'returns nil for None option using safe value method' do
+      result = described_class.success nil
+      expect(result.option.value).to eq nil
+    end
+
+    it 'returns payload for Some option using unsafe value! method' do
+      result = described_class.success nil
+      expect do
+        result.option.value!
+      end.to raise_error Nanites::Errors::ValueError
+    end
+  end
+
   context 'when determining Option type' do
     it 'returns Some for not nil value' do
       expect(described_class.send(:option_for_payload, 'foo').some?).to be_truthy

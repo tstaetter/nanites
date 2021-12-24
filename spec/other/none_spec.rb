@@ -24,13 +24,19 @@ RSpec.describe Nanites::None do
       none = described_class.new 'foo'
 
       expect do
-        none.value
+        none.value!
       end.to raise_error Nanites::Errors::ValueError
     end
 
-    it 'raises ValueError w/o value' do
+    it 'returns nil value if value is present' do
+      none = described_class.new 'foo'
+
+      expect(none.value).to be_nil
+    end
+
+    it 'raises ValueError w/o value!' do
       expect do
-        described_class.new.value
+        described_class.new.value!
       end.to raise_error Nanites::Errors::ValueError
     end
   end

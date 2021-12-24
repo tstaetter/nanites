@@ -22,7 +22,7 @@ TODO: Push gem to rubygems when initial release is ready
 
 ## Usage
 
-### Commands
+### <a name="command-section"></a>Commands
 
 Using the commands is pretty straight forward (see specs/support for more examples).
 
@@ -41,7 +41,7 @@ end
 # Be sure to only use the class method #execute, it ensures save execution
 result = MyCommand.execute some_payload
 
-puts result.value if result.success?
+puts result.option if result.success?
 # => Nanites::Some @value=<success payload>
 ```
 
@@ -65,6 +65,23 @@ compound = Nanites::Actions::Compound.new cmd1, cmd2
 
 context = compound.execute
 # => 'context' is a hash containing the execution results of each command with the commands ID as key
+```
+
+### Some and None
+
+```Some``` and ```None``` are both descendants of ```Option```. Each call of ```Nanites::Actions::Command#execute``` will
+return either a ```Some``` or ```None```, indicating that the call returns some value, or no value resp.
+
+When using those values, calling ```None#value``` will always return nil. If you need to have an error raised, use ```None#value!```.
+
+Taking the example from the [above code](#command-section), the behaviour is as follows:
+
+```ruby
+puts result.option.value
+# => will return some value if result.success? is true, nil otherwise
+
+puts result.option.value!
+# => will return some value if result.success? is true, raise a Nanites::Errors::ValueError otherwise
 ```
 
 ## Development
