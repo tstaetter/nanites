@@ -27,7 +27,7 @@ TODO: Push gem to rubygems when initial release is ready
 Using the commands is pretty straight forward (see specs/support for more examples).
 
 ```ruby
-class MyCommand < Nanites::Actions::Command
+class MyCommand < Nanites::Commands::Command
   def execute(**params)
     # your code here
     if all_went_well
@@ -61,15 +61,36 @@ A little example:
 cmd1 = SomeUsefulCommand.new payload
 cmd2 = SomeAnalyticsCommand.new payload
 
-compound = Nanites::Actions::Compound.new cmd1, cmd2
+compound = Nanites::Commands::Compound.new cmd1, cmd2
 
 context = compound.execute
 # => 'context' is a hash containing the execution results of each command with the commands ID as key
 ```
 
+### Specialized compounds
+
+There are some specials compounds as well, e.g. ```FirstSomeCompound``` returning the first result option which is
+a ```Some```, or ```MatchSomeCompound``` returning only results of commands returning ```Some``` options.
+
+For a full list of special compounds see ```lib/nanites/compounds```. Implementing your own specialized compound is
+as easy as the following (taken from ```lib/nanites/compounds/match_some_compound.rb```):
+
+```ruby
+class MatchSomeCompound < Compound
+  def initialize(*nanites)
+    super
+
+    @filter = ->(result) { result.option.some? }
+  end
+end
+```
+
+The magic happens here in the line ```@filter = ->(result) { result.option.some? }``` defining lambda checking the result.
+The filter is applied within the parent class ```execute``` method, getting passed each command result.
+
 ### Some and None
 
-```Some``` and ```None``` are both descendants of ```Option```. Each call of ```Nanites::Actions::Command#execute``` will
+```Some``` and ```None``` are both descendants of ```Option```. Each call of ```Nanites::Commands::Command#execute``` will
 return either a ```Some``` or ```None```, indicating that the call returns some value, or no value resp.
 
 When using those values, calling ```None#value``` will always return nil. If you need to have an error raised, use ```None#value!```.

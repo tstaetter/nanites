@@ -11,6 +11,7 @@ end
 
 require 'nanites'
 require 'support/class_loader_spec'
+require 'support/compound_spec'
 require 'support/identifyable_spec'
 require 'support/spec_command'
 

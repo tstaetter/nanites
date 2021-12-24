@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Nanites
-  module Actions
+  module Commands
     # Abstract Nanite command class
     # @abstract
     class Command
@@ -18,7 +18,7 @@ module Nanites
       # Execute the nanite
       # @abstract
       # @param [Hash] _params Optional arguments
-      # @return [Nanites::Actions::Result]
+      # @return [Nanites::Commands::Result]
       def execute(**_params)
         @result
       end

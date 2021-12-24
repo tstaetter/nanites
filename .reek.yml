@@ -1,5 +1,7 @@
 ---
 detectors:
+  BooleanParameter:
+    enabled: false
   UtilityFunction:
     public_methods_only: true
   UncommunicativeVariableName:
@@ -7,7 +9,14 @@ detectors:
       - e
   FeatureEnvy:
     exclude:
-      - 'Nanites::Actions::Compound#execute'
+      - 'Nanites::Commands::Compound#execute'
+      - 'Nanites::Commands::Compound#run'
+      - 'Nanites::Compounds::FirstSomeCompound#execute!'
+
+directories:
+  "lib/nanites/compounds":
+    InstanceVariableAssumption:
+      enabled: false
 
 exclude_paths:
   - spec

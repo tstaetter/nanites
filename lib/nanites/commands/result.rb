@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Nanites
-  module Actions
+  module Commands
     # Command result
     class Result
       # Defines result status constants

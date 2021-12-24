@@ -2,14 +2,14 @@
 
 require 'spec_helper'
 
-RSpec.describe Nanites::Actions::Command do
+RSpec.describe Nanites::Commands::Command do
   it_behaves_like :ClassLoader
   it_behaves_like :Identifyable
 
   context 'when executed' do
     let :new_result do
-      Nanites::Actions::Result.new Nanites::Option.none,
-                                   Nanites::Actions::Result::States::UNKNOWN,
+      Nanites::Commands::Result.new Nanites::Option.none,
+                                   Nanites::Commands::Result::States::UNKNOWN,
                                    'Not yet executed'
     end
 
@@ -27,7 +27,7 @@ RSpec.describe Nanites::Actions::Command do
       cmd = described_class.new
       cmd.execute
 
-      expect(cmd.result.status).to eq Nanites::Actions::Result::States::UNKNOWN
+      expect(cmd.result.status).to eq Nanites::Commands::Result::States::UNKNOWN
       expect(cmd.result.option).to be_a Nanites::None
     end
   end
