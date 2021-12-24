@@ -6,15 +6,19 @@ module Nanites
     class Result
       # Defines result status constants
       module States
-        UNKNOWN = -1
-        SUCCESS = 0
-        ERROR = 1
+        UNKNOWN = nil
+        SUCCESS = true
+        ERROR = false
 
         class << self
           # Is given code a valid status code?
           # @return [Boolean]
           def valid_status?(code)
-            (-1..1).include? code
+            constants(false).each do |constant|
+              return true if States.const_get(constant).eql?(code)
+            end
+
+            false
           end
         end
       end
@@ -69,9 +73,7 @@ module Nanites
         # @param [Object] value The value to be wrapped
         # @return [Option]
         def option_for_payload(value)
-          pl = value || Option.none
-
-          pl.is_a?(None) ? pl : Option.some(value)
+          value ? Option.some(value) : Option.none
         end
       end
     end

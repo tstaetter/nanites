@@ -62,5 +62,13 @@ RSpec.describe Nanites::Actions::Result do
     it 'returns None for nil value' do
       expect(described_class.send(:option_for_payload, nil).none?).to be_truthy
     end
+
+    it 'returns Some for empty String value' do
+      expect(described_class.send(:option_for_payload, '').some?).to be_truthy
+    end
+
+    it 'returns Some for empty Enumerable value' do
+      expect(described_class.send(:option_for_payload, []).some?).to be_truthy
+    end
   end
 end
