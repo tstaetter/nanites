@@ -1,5 +1,9 @@
 # Releases
 
+## 0.1.1 - 2021-12-24
+
+minor improvements, complemented README
+
 ## 0.1.0 - 2021-12-23
 
 first release
