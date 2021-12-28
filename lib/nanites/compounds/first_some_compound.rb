@@ -15,6 +15,7 @@ module Nanites
       end
 
       # Execute the compound
+      # @todo stick to contract and return context object instead of the result
       # @param [Hash] params optional parameters which get passed on to each command
       # @return [Nanites::Some] the first value
       # @return [Nanites::None] if no command returned [Some] or any of the commands raise an error

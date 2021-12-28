@@ -10,6 +10,10 @@ require_relative 'nanites/compounds/compound'
 require_relative 'nanites/compounds/first_some_compound'
 require_relative 'nanites/compounds/match_none_compound'
 require_relative 'nanites/compounds/match_some_compound'
+require_relative 'nanites/validation_contracts/value_in_context_contract'
+require_relative 'nanites/compositions/execution_guard'
+require_relative 'nanites/compositions/has_value_in_context_guard'
+require_relative 'nanites/compositions/composition'
 
 # Nanites implements a tiny framework for command pattern implementations
 module Nanites

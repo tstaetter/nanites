@@ -3,6 +3,7 @@
 module Nanites
   module Commands
     # Abstract Nanite command class
+    # @todo add optional parameter validation
     # @abstract
     class Command
       attr_reader :id, :result

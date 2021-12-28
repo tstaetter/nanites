@@ -8,5 +8,8 @@ module Nanites
 
     # Is raised, when a None option is tried to be unwrapped
     class NoCommandError < StandardError; end
+
+    # Is raised, when validation fails at some stage
+    class ValidationError < StandardError; end
   end
 end
