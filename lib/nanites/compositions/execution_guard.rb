@@ -2,7 +2,6 @@
 
 module Nanites
   module Compositions
-    # @abstract
     # ExecutionGuards are used to determine whether a command within a
     # composition should be executed or not
     class ExecutionGuard
@@ -16,7 +15,6 @@ module Nanites
         @contract = contract
       end
 
-      # @abstract
       # Determine whether execution of command should be performed
       # @param [Hash] params optional parameters
       # @return [Boolean]
