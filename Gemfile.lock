@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    nanites (0.1.0)
+    nanites (1.0.0.pre.rc)
 
 GEM
   remote: https://rubygems.org/
@@ -62,4 +62,4 @@ DEPENDENCIES
   simplecov
 
 BUNDLED WITH
-   2.2.22
+   2.2.32

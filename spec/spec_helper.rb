@@ -11,9 +11,8 @@ end
 
 require 'nanites'
 require 'support/class_loader_spec'
-require 'support/compound_spec'
-require 'support/identifyable_spec'
-require 'support/spec_command'
+require 'support/has_executable_properties_spec'
+require 'support/spec_command_classes'
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure

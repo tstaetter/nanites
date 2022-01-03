@@ -95,4 +95,21 @@ RSpec.describe Nanites::Commands::Result do
       expect(described_class.send(:option_for_payload, []).some?).to be_truthy
     end
   end
+
+  context 'when determining status' do
+    it 'returns true for result indicating an error' do
+      result = described_class.error 'foo'
+      expect(result.error? && !result.success? && !result.unknown?).to be_truthy
+    end
+
+    it 'returns true for result indicating no error' do
+      result = described_class.success 'foo'
+      expect(!result.error? && result.success? && !result.unknown?).to be_truthy
+    end
+
+    it 'returns true for result indicating unknown status' do
+      result = described_class.unknown
+      expect(!result.error? && !result.success? && result.unknown?).to be_truthy
+    end
+  end
 end

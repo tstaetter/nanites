@@ -1,5 +1,9 @@
 # Releases
 
+## 1.0.0 - 2022-01-03
+
+completely rewritten the command to be a mixin rather than a class,
+
 ## 0.1.2 - 2021-12-24
 
 refactored module names, refactored compound, added more convenient compounds, complemented README

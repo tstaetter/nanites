@@ -2,12 +2,17 @@
 
 # Nanites - tiny command pattern framework for Ruby
 
+## TODOs
+
+- Push gem to rubygems when first major release is ready
+- Fix reek warning in executable.rb:26
+
 ## Installation
 
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'nanites', github: 'tstaetter/nanites', branch: 'main'
+gem 'nanites', github: 'tstaetter/nanites', branch: '1.0.0-rc'
 ```
 
 And then execute:
@@ -18,8 +23,6 @@ When available on rubygems.org, you can install it yourself as:
 
     $ gem install nanites
 
-TODO: Push gem to rubygems when initial release is ready
-
 ## Usage
 
 ### <a name="command-section"></a>Commands
@@ -27,19 +30,23 @@ TODO: Push gem to rubygems when initial release is ready
 Using the commands is pretty straight forward (see specs/support for more examples).
 
 ```ruby
-class MyCommand < Nanites::Commands::Command
-  def execute(**params)
-    # your code here
-    if all_went_well
-      success success_payload
-    else
-      error error_payload
-    end
+class SimpleCommand
+  include Nanites::Commands::Executable
+
+  attr_reader :test_name
+
+  def initialize(my_name)
+    @test_name = my_name
+  end
+
+  # @see [Nanites::Commands::Executable#execute]
+  def execute(*_args)
+    success 'I am the success payload', 'Executed successfully'
   end
 end
 
 # Be sure to only use the class method #execute, it ensures save execution
-result = MyCommand.execute some_payload
+result = SimpleCommand.execute some_payload
 
 puts result.option if result.success?
 # => Nanites::Some @value=<success payload>
@@ -52,46 +59,14 @@ either is a ```Nanites::Some``` indicating some return value is available or
 This is done in order to not having the hassle to deal with ```nil``` values. This
 approach is inspired by the Option type in [Rust](https://www.rust-lang.org/).
 
-### Compounds
-
-Compounds can be used to combine several commands.
-A little example:
-
-```ruby
-cmd1 = SomeUsefulCommand.new payload
-cmd2 = SomeAnalyticsCommand.new payload
-
-compound = Nanites::Commands::Compound.new cmd1, cmd2
-
-context = compound.execute
-# => 'context' is a hash containing the execution results of each command with the commands ID as key
-```
-
-### Specialized compounds
-
-There are some specials compounds as well, e.g. ```FirstSomeCompound``` returning the first result option which is
-a ```Some```, or ```MatchSomeCompound``` returning only results of commands returning ```Some``` options.
-
-For a full list of special compounds see ```lib/nanites/compounds```. Implementing your own specialized compound is
-as easy as the following (taken from ```lib/nanites/compounds/match_some_compound.rb```):
-
-```ruby
-class MatchSomeCompound < Compound
-  def initialize(*nanites)
-    super
-
-    @filter = ->(result) { result.option.some? }
-  end
-end
-```
-
 The magic happens here in the line ```@filter = ->(result) { result.option.some? }``` defining lambda checking the result.
 The filter is applied within the parent class ```execute``` method, getting passed each command result.
 
-### Some and None
+### Some, None and Maybe
 
-```Some``` and ```None``` are both descendants of ```Option```. Each call of ```Nanites::Commands::Command#execute``` will
-return either a ```Some``` or ```None```, indicating that the call returns some value, or no value resp.
+```Some```, ```None``` and ```Maybe``` are all classes using the mixin ```Option```. Each call of 
+```Nanites::Commands::Command#execute``` will return one of those three options, indicating that the call returns some value (```Some```), 
+no value (```None```) or ```Maybe```. The latter one typically indicates something weired happened.
 
 When using those values, calling ```None#value``` will always return nil. If you need to have an error raised, use ```None#value!```.
 
@@ -105,6 +80,7 @@ puts result.option.value!
 # => will return some value if result.success? is true, raise a Nanites::Errors::ValueError otherwise
 ```
 
+Freshly initialized and yet executed commands will always return a ```Maybe```.
 ## Development
 
 `rake spec` to run the tests.

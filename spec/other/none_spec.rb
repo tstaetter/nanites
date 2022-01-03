@@ -39,15 +39,23 @@ RSpec.describe Nanites::None do
         described_class.new.value!
       end.to raise_error Nanites::Errors::ValueError
     end
+
+    it 'returns true when calling value?' do
+      expect(described_class.new.value?).to be_falsey
+    end
   end
 
   context 'when determining value type' do
-    it 'returns true for some?' do
+    it 'returns false for some?' do
       expect(described_class.new.some?).to be_falsey
     end
 
-    it 'returns false for none?' do
+    it 'returns true for none?' do
       expect(described_class.new.none?).to be_truthy
+    end
+
+    it 'returns false for maybe?' do
+      expect(described_class.new.maybe?).to be_falsey
     end
   end
 end

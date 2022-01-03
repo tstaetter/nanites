@@ -6,9 +6,9 @@ module Nanites
     class Result
       # Defines result status constants
       module States
-        UNKNOWN = nil
-        SUCCESS = true
-        ERROR = false
+        UNKNOWN = Option.maybe
+        SUCCESS = Option.some true
+        ERROR = Option.none
 
         class << self
           # Is given code a valid status code?
@@ -25,12 +25,8 @@ module Nanites
 
       attr_reader :messages, :option, :status
 
-      # Create new Result
-      # @param [Option] option
-      # @param [Integer] status
-      # @param [Array] messages
-      # @raise [ArgumentError] if payload is not of type [Nanites::Option]
-      # @raise [ArgumentError] if status code is not supported
+      # @param [Object] option
+      # @param [States] status
       def initialize(option, status = States::UNKNOWN, *messages)
         raise ArgumentError, 'Payload must be an "Option"' unless option.is_a?(Nanites::Option)
         raise ArgumentError, "Unknown status code '#{status}'" unless States.valid_status?(status)
@@ -50,6 +46,11 @@ module Nanites
         @status.eql? States::SUCCESS
       end
 
+      # Does the result indicate unknown command execution?
+      def unknown?
+        @status.eql?(States::UNKNOWN) || (!error? && !success?)
+      end
+
       class << self
         # Create result object indicating an erroneous command execution
         # @param [Object] value optional payload
@@ -65,6 +66,12 @@ module Nanites
         # @return [Nanites::Result]
         def success(value, *messages)
           Result.new option_for_payload(value), States::SUCCESS, *messages
+        end
+
+        # Create unknown result
+        # @return [Nanites::Result]
+        def unknown
+          Result.new Option.none, States::UNKNOWN, 'Undefined result'
         end
 
         private

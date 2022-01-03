@@ -12,25 +12,37 @@ module Nanites
         value ? some(value) : none
       end
 
-      # Create a not nil value container
+      # Create a value container
       # @param [Object] value An arbitrary value
+      # @return [Some]
       def some(value)
         Some.new value
       end
 
-      # Create a nil value container
+      # Create a NO value container
+      # @return [None]
       def none
         None.new
+      end
+
+      # @param [nil] value
+      # @return [Maybe]
+      def maybe(value = nil)
+        Maybe.new value
       end
     end
 
     # @abstract
-    # Is a Some value?
+    # Is a [Some] value?
     def some?; end
 
     # @abstract
-    # Is a None value?
+    # Is a [None] value?
     def none?; end
+
+    # @abstract
+    # Is a [Maybe] value?
+    def maybe?; end
 
     # @abstract
     # Safe getter for value
@@ -42,9 +54,14 @@ module Nanites
     # @returns [Object]
     # @raise [Nanites::Errors::ValueError]
     def value!; end
+
+    # @abstract
+    # Does a value exist?
+    # @returns [Boolean]
+    def value?; end
   end
 
-  # Generic class representing a not nil value
+  # Generic class representing explicitly SOME value
   # :reek:MissingSafeMethod { exclude: [ value! ] }
   class Some
     include Option
@@ -52,7 +69,7 @@ module Nanites
     attr_reader :value
 
     def initialize(value)
-      @value = value
+      @value = value.freeze
     end
 
     # @see Option#value!
@@ -60,6 +77,11 @@ module Nanites
       raise Nanites::Errors::ValueError, 'Value is nil' unless @value
 
       @value
+    end
+
+    # @see Option#value?
+    def value?
+      true
     end
 
     # @see Option#some?
@@ -71,9 +93,14 @@ module Nanites
     def none?
       false
     end
+
+    # @see Option#maybe?
+    def maybe?
+      false
+    end
   end
 
-  # Generic class representing a nil value
+  # Generic class representing explicitly NO value
   # :reek:MissingSafeMethod { exclude: [ value! ] }
   class None
     include Option
@@ -88,9 +115,61 @@ module Nanites
       true
     end
 
+    # @see Option#maybe?
+    def maybe?
+      false
+    end
+
     # @see Option#value!
     def value!
       raise Nanites::Errors::ValueError, "No values available in a #{self.class.name} object"
+    end
+
+    # @see Option#value?
+    def value?
+      false
+    end
+  end
+
+  # Generic class representing either [Some] or [None]
+  class Maybe
+    include Option
+
+    def initialize(value = nil)
+      @value = Option.option value
+      @value&.freeze
+    end
+
+    # @see Option#some?
+    def some?
+      false
+    end
+
+    # @see Option#none?
+    def none?
+      false
+    end
+
+    # @see Option#maybe?
+    def maybe?
+      true
+    end
+
+    # @see Option#value
+    def value
+      @value.value
+    end
+
+    # @see Option#value!
+    def value!
+      raise Nanites::Errors::ValueError, 'No value available' if @value.none?
+
+      @value.value
+    end
+
+    # @see Option#value?
+    def value?
+      @value.some?
     end
   end
 end

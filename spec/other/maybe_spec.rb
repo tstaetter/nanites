@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-RSpec.describe Nanites::Some do
+RSpec.describe Nanites::Maybe do
   it_behaves_like :ClassLoader
 
   context 'when initializing' do
@@ -12,52 +12,54 @@ RSpec.describe Nanites::Some do
       end.to_not raise_error
     end
 
-    it 'cannot be initialized w/o value' do
+    it 'can be initialized w/o value' do
       expect do
         described_class.new
-      end.to raise_error
+      end.to_not raise_error
     end
   end
 
   context 'when calling value' do
     it 'returns value' do
-      some = described_class.new 'foo'
+      maybe = described_class.new 'foo'
 
-      expect(some.value!).to eq 'foo'
+      expect(maybe.value!).to eq 'foo'
     end
 
     it 'returns nil value if value was set to nil' do
-      some = described_class.new 'foo'
-      some.instance_variable_set :'@value', nil
+      maybe = described_class.new nil
 
-      expect(some.value).to be_nil
+      expect(maybe.value).to be_nil
     end
 
     it 'raises ValueError when calling value! on nil value' do
       expect do
-        some = described_class.new 'foo'
-        some.instance_variable_set :'@value', nil
+        maybe = described_class.new nil
 
-        some.value!
+        maybe.value!
       end.to raise_error Nanites::Errors::ValueError
     end
 
-    it 'returns true when calling value?' do
+    it 'returns true when calling value? and value is set' do
       expect(described_class.new('foo').value?).to be_truthy
+    end
+
+    it 'returns false when calling value? and no value is set' do
+      expect(described_class.new.value?).to be_falsey
     end
   end
 
   context 'when determining value type' do
-    it 'returns true for some?' do
-      expect(described_class.new('foo').some?).to be_truthy
+    it 'returns true for maybe?' do
+      expect(described_class.new('foo').maybe?).to be_truthy
     end
 
     it 'returns false for none?' do
       expect(described_class.new('foo').none?).to be_falsey
     end
 
-    it 'returns false for maybe?' do
-      expect(described_class.new('foo').maybe?).to be_falsey
+    it 'returns false for some?' do
+      expect(described_class.new('foo').some?).to be_falsey
     end
   end
 end
