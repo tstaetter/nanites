@@ -20,6 +20,20 @@ end
 class ErrorCommand
   include Nanites::Commands::Executable
 
+  def initialize(*args); end
+
+  # @see [Nanites::Commands::Executable#execute]
+  def execute(*args)
+    raise StandardError if args.empty?
+
+    error args if args.length.eql?(1)
+    success args if args.length.eql?(2)
+  end
+end
+
+class NoArgsCommand
+  include Nanites::Commands::Executable
+
   # @see [Nanites::Commands::Executable#execute]
   def execute(*args)
     raise StandardError if args.empty?

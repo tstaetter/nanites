@@ -22,21 +22,11 @@ module Nanites
         # Execute the nanite
         # @return [Nanites::Commands::Result]
         def execute(*args)
-          execute!(*args)
-        rescue StandardError => e
-          Result.error e, "Error executing command with payload '#{args}'"
-        end
-
-        # @abstract
-        # Unsave execute the nanite
-        # @return [Nanites::Commands::Result]
-        # @raise [Nanites::Errors::ExecutionError] if any error occurs during execution
-        def execute!(*_args)
           super
 
           @result
         rescue StandardError => e
-          raise Nanites::Errors::ExecutionError, e
+          Result.error e, "Error executing command with payload '#{args}'"
         end
       end
 
@@ -45,18 +35,10 @@ module Nanites
         # Instantiate new Command object and safely run it's #execute method
         # @return [Nanites::Commands::Result]
         def execute(*args, &blk)
-          execute!(*args, &blk)
+          cmd = new *args, &blk
+          cmd.execute(*args)
         rescue StandardError => e
           Result.error e, "Error executing command with payload '#{args}'"
-        end
-
-        # Instantiate new Command object and unsafely run it's #execute method
-        # @return [Result]
-        # @raise [StandardError]
-        # :reek:FeatureEnvy
-        def execute!(*args, &blk)
-          cmd = new(*args, &blk)
-          cmd.execute(*args) || cmd.result
         end
       end
 

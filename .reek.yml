@@ -9,9 +9,7 @@ detectors:
       - e
   FeatureEnvy:
     exclude:
-      - 'Nanites::Commands::Compound#execute'
-      - 'Nanites::Commands::Compound#run'
-      - 'Nanites::Compounds::FirstSomeCompound#execute!'
+      - 'Nanites::Commands::Executable#execute'
 
 directories:
   "lib/nanites/compounds":
