@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-RSpec.describe Nanites::Commands::Result do
+RSpec.describe Nanites::Result do
   it_behaves_like :ClassLoader
 
   let :none do

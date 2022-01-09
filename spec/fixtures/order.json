@@ -1,0 +1,14 @@
+{
+  "order": {
+    "line_items": [
+      {
+        "sku": "ASDF",
+        "price": 12
+      }
+    ],
+    "total_price": 12,
+    "customer": {
+      "email": "test@test.com"
+    }
+  }
+}

@@ -3,7 +3,7 @@
 module Nanites
   # Defines all custom error classes
   module Errors
-    # Is raised, when a None option is tried to be unwrapped
+    # Is raised, when an inappropriate value is used
     class ValueError < StandardError; end
 
     # Is raised, if a command execution fails

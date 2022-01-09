@@ -23,7 +23,7 @@ RSpec.describe SimpleCommand do
     end
 
     it 'has default result set to unknown' do
-      expect(described_class.new('foo').result.status).to eq Nanites::Commands::Result::States::UNKNOWN
+      expect(described_class.new('foo').result.status).to eq Nanites::Result::States::UNKNOWN
     end
 
     it 'has class specific instance variables set' do
