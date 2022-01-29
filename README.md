@@ -6,6 +6,7 @@
 
 - Push gem to rubygems when first major release is ready
 - Fix reek warning in executable.rb:26
+- Implement #deconstruct, #deconstruct_keys to be able to use pattern matching
 
 ## Installation
 

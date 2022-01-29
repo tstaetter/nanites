@@ -111,5 +111,16 @@ RSpec.describe Nanites::Result do
       result = described_class.unknown
       expect(!result.error? && !result.success? && result.unknown?).to be_truthy
     end
+
+    it 'returns true for known status' do
+      described_class::States.constants(false).each do |state|
+        value = described_class::States.const_get state
+        expect(described_class::States.valid_status?(value)).to be_truthy
+      end
+    end
+
+    it 'returns false for unknown status' do
+      expect(described_class::States.valid_status?(:foo)).to be_falsey
+    end
   end
 end

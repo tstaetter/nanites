@@ -13,11 +13,9 @@ module Nanites
         # Is given code a valid status code?
         # @return [Boolean]
         def valid_status?(code)
-          constants(false).each do |constant|
-            return true if States.const_get(constant).eql?(code)
-          end
-
-          false
+          constants(false).select do |constant|
+            States.const_get(constant).eql?(code)
+          end.count.positive?
         end
       end
     end
