@@ -12,16 +12,24 @@ RSpec.describe Nanites::Compositions::DSL do
   end
 
   context 'when using DSL' do
-    let :payload do
+    let :order do
       JSON.load_file 'spec/fixtures/order.json'
     end
 
     pending 'can create composition' do
       composition = Nanites.compose payload: order do
-        add MyCommand, if: -> (context) { context[:customer][:email] =~ EMAIL_REGEX }
+        add NoArgsCommand.new(foo: :bar), if: -> (context) { context[:customer][:email] =~ EMAIL_REGEX }
       end
 
       expect(composition).to be_a Nanites::Compositions::Composition
+    end
+
+    it 'can run composition' do
+      result = Nanites.compose payload: order do
+        add NoArgsCommand.new(foo: :bar), if: -> (context) { context[:customer][:email] =~ EMAIL_REGEX }
+      end.run
+
+      expect(result.success?).to be_truthy
     end
   end
 end

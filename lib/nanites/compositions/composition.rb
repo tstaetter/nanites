@@ -7,14 +7,16 @@ module Nanites
     class Composition
       attr_reader :commands
 
-      def initialize(*commands, **context)
+      def initialize(*commands, **context, &blk)
         @commands = commands || []
         @_context = context
+
+        blk.call if block_given?
       end
 
       # Add a command. Order matters, commands are executed in FIFO order
       # Add execution guards using 'if:' parameter
-      # @example 
+      # @example
       #   ```
       #     c = Composition.new
       #     c.add MyCommand, if: -> (context) { context[:customer][:email] =~ EMAIL_REGEX }
@@ -26,19 +28,21 @@ module Nanites
         raise Nanites::Errors::ValueError, 'Given command is not an executable' unless
           command.respond_to?(:execute)
 
-        @commands << { command: command, guard: parse_guard(**guard) }
+        @commands << [command, parse_guard(**guard)]
       end
       alias << add
 
       # Execute all commands added to this composition
       # @return [Nanites::Result]
       def run
-        Nanites::Result.success @commands.map do |cmd_guard|
-          guard = cmd_guard[:guards]
-          cmd = cmd_guard[:command]
+        result = @commands.map do |pair|
+          guard = pair.first
+          cmd = pair.last
 
           [cmd.id, cmd.execute(@_context)] if guard.call(@_context)
         end.to_h
+
+        Nanites::Result.success result
       rescue StandardError => e
         Nanites::Result.error e, 'Error running composition'
       end
@@ -46,7 +50,7 @@ module Nanites
       private
 
       # Helper parsing execution guards
-      # @return [Proc]
+      # @return [Proc | nil]
       def parse_guard(**params)
         params.each_pair do |key, guard|
           return guard if key.eql?(:if)

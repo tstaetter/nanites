@@ -5,9 +5,7 @@ module Nanites
     # Convenient DSL for handling compositions
     module DSL
       def compose(**context, &blk)
-        Composition.new([], context, blk).tap do |c|
-          c.instance_exec blk if block_given?
-        end
+        Composition.new([], context, blk)
       end
     end
   end

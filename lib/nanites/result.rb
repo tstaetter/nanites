@@ -48,6 +48,16 @@ module Nanites
       @status.eql?(States::UNKNOWN) || (!error? && !success?)
     end
 
+    # Use for pattern matching
+    def deconstruct
+      @status
+    end
+
+    # Use for pattern matching
+    def deconstruct_keys
+      { status: @status }
+    end
+
     class << self
       # Create result object indicating an erroneous command execution
       # @param [Object] value optional payload

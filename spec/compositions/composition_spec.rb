@@ -33,6 +33,15 @@ RSpec.describe Nanites::Compositions::Composition do
 
       expect(composition.commands.count).to eq 3
     end
+
+    it 'can run block' do
+      tester = ''
+      described_class.new NoArgsCommand, foo: :bar do
+        tester = 'block executed'
+      end
+
+      expect(tester).to eq 'block executed'
+    end
   end
 
   context 'when running' do
