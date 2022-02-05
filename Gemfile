@@ -5,6 +5,7 @@ source 'https://rubygems.org'
 # Specify your gem's dependencies in nanites.gemspec
 gemspec
 
+gem 'activesupport', '~> 7.0.1'
 gem 'rspec', '~> 3.0'
 gem 'rubocop', '~> 1.22.3'
 gem 'rubocop-rspec', '~> 2.6'

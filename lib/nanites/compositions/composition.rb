@@ -8,7 +8,7 @@ module Nanites
       attr_reader :commands
 
       def initialize(*commands, **context, &blk)
-        @commands = commands || []
+        @commands = initialize_commands commands
         @_context = context
 
         blk.call if block_given?
@@ -21,25 +21,29 @@ module Nanites
       #     c = Composition.new
       #     c.add MyCommand, if: -> (context) { context[:customer][:email] =~ EMAIL_REGEX }
       #   ```
-      # @param [Nanites::Commands::Executable] command Either a command class or object
+      # @param [Object] command A command class adding the [Nanites::Commands::Executable] mixin
       # @raise [Nanites::Errors::ValueError] if command is not an Executable
-      def add(command, **guard)
+      def add(command)
         # Use duck typing to determine whether given command is an executable
         raise Nanites::Errors::ValueError, 'Given command is not an executable' unless
           command.respond_to?(:execute)
 
-        @commands << [command, parse_guard(**guard)]
+        # @commands << if command.is_a?(Class)
+        #               command.new
+        #             else
+        #               command
+        #             end
+        @commands << command
       end
       alias << add
 
       # Execute all commands added to this composition
       # @return [Nanites::Result]
-      def run
-        result = @commands.map do |pair|
-          guard = pair.first
-          cmd = pair.last
+      def run(**context)
+        @_context = context || {}
 
-          [cmd.id, cmd.execute(@_context)] if guard.call(@_context)
+        result = @commands.map do |cmd|
+          [cmd.executable_id, cmd.execute(@_context)]
         end.to_h
 
         Nanites::Result.success result
@@ -49,12 +53,10 @@ module Nanites
 
       private
 
-      # Helper parsing execution guards
-      # @return [Proc | nil]
-      def parse_guard(**params)
-        params.each_pair do |key, guard|
-          return guard if key.eql?(:if)
-        end
+      # Initialize command array
+      # @param [Array] commands
+      def initialize_commands(commands)
+        @commands = commands || []
       end
     end
   end

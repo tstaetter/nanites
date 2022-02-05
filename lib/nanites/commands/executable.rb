@@ -10,9 +10,7 @@ module Nanites
         attr_reader :executable_id, :payload, :result
 
         # Rewrite the object initializer to add required instance vars
-        def initialize(*args, &blk)
-          super
-
+        def initialize_executable
           @executable_id = SecureRandom.uuid.freeze
           @payload = Option.none
           @result = Result.unknown

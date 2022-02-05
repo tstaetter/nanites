@@ -27,8 +27,8 @@ RSpec.describe Nanites::Compositions::Composition do
     end
 
     it 'can be added new command objects using' do
-      composition.add NoArgsCommand.new
-      composition << NoArgsCommand.new
+      composition.add NoArgsCommand
+      composition << NoArgsCommand
       composition.add NoArgsCommand
 
       expect(composition.commands.count).to eq 3
@@ -51,6 +51,16 @@ RSpec.describe Nanites::Compositions::Composition do
 
     it 'always returns a result' do
       expect(instance.run.respond_to?(:option)).to be_truthy
+    end
+
+    it 'returns success if run was successful' do
+      context = { foo: :bar }
+      composition = described_class.new CompostionCommand.new(:foo, :bar), foo: :bar
+      composition.add CompostionCommand.new(:lorem, :ipsum)
+      composition.add CompostionCommand.new(:blub, :lall)
+      result = composition.run
+
+      expect(result.success?).to be_truthy
     end
   end
 end

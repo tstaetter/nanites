@@ -9,6 +9,7 @@ class SimpleCommand
 
   def initialize(my_name)
     @test_name = my_name
+    initialize_executable
   end
 
   # @see [Nanites::Commands::Executable#execute]
@@ -20,7 +21,9 @@ end
 class ErrorCommand
   include Nanites::Commands::Executable
 
-  def initialize(*args); end
+  def initialize(*args)
+    initialize_executable
+  end
 
   # @see [Nanites::Commands::Executable#execute]
   def execute(*args)
@@ -34,11 +37,28 @@ end
 class NoArgsCommand
   include Nanites::Commands::Executable
 
+  def initialize
+    initialize_executable
+  end
+
   # @see [Nanites::Commands::Executable#execute]
   def execute(*args)
     raise StandardError if args.empty?
 
     error args if args.length.eql?(1)
     success args if args.length.eql?(2)
+  end
+end
+
+class CompostionCommand
+  include Nanites::Commands::Executable
+
+  def initialize(first, last)
+    initialize_executable
+  end
+
+  # @see [Nanites::Commands::Executable#execute]
+  def execute(*args)
+    success args.first
   end
 end
