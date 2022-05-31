@@ -123,4 +123,88 @@ RSpec.describe Nanites::Result do
       expect(described_class::States.valid_status?(:foo)).to be_falsey
     end
   end
+
+  context 'when accessing status' do
+    it 'has SUCCESS status if initialized so' do
+      result = described_class.success 'foo'
+
+      expect(result.status).to eq Nanites::Result::States::SUCCESS
+    end
+
+    it 'has ERROR status if initialized so' do
+      result = described_class.error 'foo'
+
+      expect(result.status).to eq Nanites::Result::States::ERROR
+    end
+
+    it 'has UNKNOWN status if initialized so' do
+      result = described_class.unknown
+
+      expect(result.status).to eq Nanites::Result::States::UNKNOWN
+    end
+  end
+
+  context 'when using pattern matching' do
+    it 'can match success' do
+      result = described_class.success 'foo'
+      match = case result.status
+              in Nanites::Some
+                true
+              else
+                false
+              end
+
+      expect(match).to be_truthy
+    end
+
+    it 'can match error' do
+      result = described_class.error 'foo'
+      match = case result.status
+      in Nanites::None
+        true
+              else
+                false
+              end
+
+      expect(match).to be_truthy
+    end
+  end
+
+  context 'when using hash pattern matching' do
+    it 'can match success' do
+      result = described_class.success 'foo'
+      match = case result
+              in Nanites::Result(status: Nanites::Result::States::SUCCESS, value: 'foo')
+                true
+              else
+                false
+              end
+
+      expect(match).to be_truthy
+    end
+
+    it 'can match error' do
+      result = described_class.error 'foo'
+      match = case result
+              in Nanites::Result(status: Nanites::Result::States::ERROR, value: 'foo')
+                true
+              else
+                false
+              end
+
+      expect(match).to be_truthy
+    end
+
+    it 'can match unknown' do
+      result = described_class.unknown
+      match = case result
+              in Nanites::Result(status: Nanites::Result::States::UNKNOWN)
+                true
+              else
+                false
+              end
+
+      expect(match).to be_truthy
+    end
+  end
 end

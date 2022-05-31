@@ -49,13 +49,8 @@ module Nanites
     end
 
     # Use for pattern matching
-    def deconstruct
-      @status
-    end
-
-    # Use for pattern matching
-    def deconstruct_keys
-      { status: @status }
+    def deconstruct_keys(_keys)
+      { status: @status, value: @option.value }
     end
 
     class << self
